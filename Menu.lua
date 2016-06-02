@@ -939,6 +939,13 @@ CheckBoxThing:SetConVar( "mike_rapidfire" ) -- ConCommand must be a 1 or 0 value
 CheckBoxThing:SetValue( 0 )
 CheckBoxThing:SizeToContents() -- Zorgt ervoor dat hij niet autistisch doet 
 
+
+local CheckBoxThing = vgui.Create( "DCheckBoxLabel", frame )  
+CheckBoxThing:SetPos( 20, 650 )
+CheckBoxThing:SetText( "Funny Tbag" )
+CheckBoxThing:SetConVar( "mike_tbag" ) -- ConCommand must be a 1 or 0 value
+CheckBoxThing:SetValue( 0 )
+CheckBoxThing:SizeToContents() -- Zorgt ervoor dat hij niet autistisch doet 
 -------------------------------------------Functions----------------
 function frame_open()  --Close  Menu
 	frame:SetVisible(true)
@@ -1355,7 +1362,7 @@ CreateClientConVar("mike_box", 0, true, false)
 					--if v:IsValid( v:GetActiveWeapon() ) then
 						--render.SetColorModulation( 255, 0, 0 )
 						--v:GetActiveWeapon():DrawModel()
-					end
+					
 			cam.End3D()
 			end
 		end
@@ -1377,6 +1384,20 @@ function  Reload()
 		end
 end
 
+
+------------------------tbag--------
+CreateClientConVar("mike_tbag", 0, true, false)
+
+function  Tbag()
+  if GetConVar("mike_tbag"):GetInt() == 1 then
+if input.IsKeyDown( KEY_L ) then
+	RunConsoleCommand ("+duck")
+	timer.Simple(1,  function()
+	RunConsoleCommand  ("-duck")
+end)
+end
+end
+end
 ---------------------Reload Note---------------
 CreateClientConVar("mike_reloadnote", 0, true, false)
 
@@ -1416,6 +1437,6 @@ hook.Add("HUDPaint","Reloadnote", Reloadnote)
 hook.Add("CalcView", "MyCalcView", MyCalcView)
 hook.Add("Think", "Rainbow", Rainbow)
 hook.Add("CreateMove", "rapidfire", rapidfire)
-
+hook.Add("Think", "Tbag", Tbag )
 
 
