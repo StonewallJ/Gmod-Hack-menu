@@ -1,6 +1,18 @@
 chat.AddText( Color( 100, 255, 100 ) ,"GMOD HACK MENU:" ,  Color( 0, 157, 209 ), "Welcome to Mike scripts!")
 chat.AddText( Color( 100, 255, 100 ) ,"NOTICE:" ,  Color( 0, 157, 209 ),"Type: 'bind k +Hmenu' in console to open the menu!")
 
+LastTime = CurTime()
+
+function drawdatopscreen()  
+		draw.RoundedBox(0,0,0,ScrW(),21,Color(0,0,0,200))
+		sweg = math.Clamp((CurTime()-LastTime)/20,0,1)
+	if sweg == 1 then
+		LastTime = CurTime()
+	end
+		draw.DrawText("Made By: MikeDoge9 | Happy Hacking ","Trebuchet24",(ScrW() + 600) - sweg*3100 , -2, Color(255,255,255),TEXT_ALIGN_CENTER )
+	
+end
+
 
 Chams = CreateMaterial( "Mat", "VertexLitGeneric", { ["$basetexture"] = "models/debug/debugwhite", ["$model"] = 1, ["$ignorez"] = 1 } ) --Defineert de Chams 
 surface.CreateFont( "CR", { font = "Arial", size = 14, weight = 750, antialias = false, outline = true } );
@@ -46,6 +58,7 @@ button:SetSize(100,30)
 button:SetText("Force sv_cheat 1")
 button.DoClick = function()
 RunConsoleCommand( "rcon", "sv_cheats", "1 ")
+LocalPlayer():ConCommand("incrementvar sv_cheats 0 1 1")
 print("Forcing")
 chat.AddText( Color( 100, 255, 100 ) ,"GMOD HACKER:" ,  Color( 0, 157, 209 )," Forcing Cheats") 
 end
@@ -946,6 +959,13 @@ CheckBoxThing:SetText( "Funny Tbag" )
 CheckBoxThing:SetConVar( "mike_tbag" ) -- ConCommand must be a 1 or 0 value
 CheckBoxThing:SetValue( 0 )
 CheckBoxThing:SizeToContents() -- Zorgt ervoor dat hij niet autistisch doet 
+
+local CheckBoxThing = vgui.Create( "DCheckBoxLabel", frame )  
+CheckBoxThing:SetPos( 20, 680 )
+CheckBoxThing:SetText( "Speed Hack" )
+CheckBoxThing:SetConVar( "mike_speed" ) -- ConCommand must be a 1 or 0 value
+CheckBoxThing:SetValue( 0 )
+CheckBoxThing:SizeToContents() -- Zorgt ervoor dat hij niet autistisch doet 
 -------------------------------------------Functions----------------
 function frame_open()  --Close  Menu
 	frame:SetVisible(true)
@@ -1137,7 +1157,7 @@ function triggeerbot()
 	end
 end
 
------------------------Triggeerbothook-----------------------
+-----------------------Flashlight spam---------------
 
 CreateClientConVar("mike_flashlight", 0, true, false)
 
@@ -1148,6 +1168,19 @@ function Flashspam()
 			return end
 	end
 end
+
+
+-----------------------------Speed Hack---------------
+CreateClientConVar("mike_speed", 0, true, false)
+
+function Speedhack()
+if GetConVarNumber("mike_speed") == 1 then
+LocalPlayer():ConCommand("host_framerate 8;host_framerate 8")
+end
+-- if GetConVarNumber("mike_speed") == 0 then
+-- LocalPlayer():ConCommand("host_framerate 0;host_framerate 0")
+end
+
 -------------------------------No spread------------
 CreateClientConVar("mike_nospread", 0, true, false)
 
@@ -1438,5 +1471,8 @@ hook.Add("CalcView", "MyCalcView", MyCalcView)
 hook.Add("Think", "Rainbow", Rainbow)
 hook.Add("CreateMove", "rapidfire", rapidfire)
 hook.Add("Think", "Tbag", Tbag )
+hook.Add("Think", "Speedhack", Speedhack)
+hook.Add( "HUDPaint", "drawdatopscreen", drawdatopscreen )
+
 
 
